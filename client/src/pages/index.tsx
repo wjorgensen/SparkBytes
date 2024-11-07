@@ -6,12 +6,14 @@ import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 export default function Home() {
   const [signedIn, setSignedIn] = useState(false);
 
+  // Sign in with Google
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
       setSignedIn(true);
     } catch (error) {
+      // TODO: Add error handling
       console.error("Error signing in with Google:", error);
     }
   };
