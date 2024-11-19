@@ -90,7 +90,13 @@ export default function Home() {
         <div>
           <h1>Spark! Bytes</h1>
           <p>Find free food on BU campus</p>
-          <button onClick={signInWithGoogle}>
+          <button 
+            onClick={signInWithGoogle}
+            className={styles.googleButton}
+          >
+            <Image
+              src="/public/google-logo.png"
+            />
             Sign in with Google
           </button>
         </div>
