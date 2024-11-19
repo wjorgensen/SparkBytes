@@ -8,7 +8,7 @@ export default function Events() {
       <nav className={styles.navbar}>
         <ul className={styles.navList}>
           <li>
-            <Link href="/">Home</Link>
+            <Link href="/home">Home</Link>
           </li>
           <li>
             <Link href="/events">Events</Link>

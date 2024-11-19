@@ -4,11 +4,12 @@ import { auth } from "@/lib/firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { rtdb } from "@/lib/firebase";
 import { ref, set, get, child } from "firebase/database";
-import Image from 'next/image';
+import { useRouter } from "next/router";
 
 export default function Home() {
   const [signedIn, setSignedIn] = useState(false);
   const [events, setEvents] = useState(null);
+  const router = useRouter();
 
   // Sign in with Google
   const signInWithGoogle = async () => {
@@ -16,8 +17,8 @@ export default function Home() {
     try {
       await signInWithPopup(auth, provider);
       setSignedIn(true);
+      router.push("/home"); // Redirect to the home page
     } catch (error) {
-      // TODO: Add error handling
       console.error("Error signing in with Google:", error);
     }
   };
@@ -32,9 +33,9 @@ export default function Home() {
             food: "Pizza and Salad",
             date: "2024-03-15",
             creator: "user123",
-            extraInfo: "Free for all students"
-          }
-        }
+            extraInfo: "Free for all students",
+          },
+        },
       };
 
       await set(ref(rtdb), sampleData);
@@ -49,8 +50,8 @@ export default function Home() {
   const fetchAllData = async () => {
     try {
       const dbRef = ref(rtdb);
-      const snapshot = await get(child(dbRef, '/'));
-      
+      const snapshot = await get(child(dbRef, "/"));
+
       if (snapshot.exists()) {
         const data = snapshot.val();
         setEvents(data);
@@ -64,24 +65,18 @@ export default function Home() {
     }
   };
 
-  // TODO: Add check to see if user is a BU email
   return (
     <>
-      {/* Not signed in page */}
       {signedIn ? (
-        <div>
+        <div className={styles.container}>
           <h1>Spark! Bytes</h1>
           <p>Welcome to Spark! Bytes</p>
-          <div style={{ marginTop: '20px' }}>
-            <button onClick={postSampleData} style={{ marginRight: '10px' }}>
-              Post Sample Data
-            </button>
-            <button onClick={fetchAllData}>
-              Fetch All Data
-            </button>
+          <div className={styles.actionButtons}>
+            <button onClick={postSampleData}>Post Sample Data</button>
+            <button onClick={fetchAllData}>Fetch All Data</button>
           </div>
           {events && (
-            <div style={{ marginTop: '20px' }}>
+            <div className={styles.events}>
               <h2>Current Data:</h2>
               <pre>{JSON.stringify(events, null, 2)}</pre>
             </div>
@@ -91,19 +86,11 @@ export default function Home() {
         <div className={styles.container}>
           <h1>Spark! Bytes</h1>
           <p>Find free food on BU campus</p>
-          <button 
-            onClick={signInWithGoogle}
-            className={styles.googleButton}
-          >
-            <Image
-              src="/google-logo.png"
-              alt="Google logo"
-              width={18}
-              height={18}
-              style={{ marginRight: '8px' }}
-            />
-            Sign in with Google
-          </button>
+          <div className={styles.buttonContainer}>
+            <button onClick={signInWithGoogle} className={styles.signInButton}>
+              Sign in with Google
+            </button>
+          </div>
         </div>
       )}
     </>
