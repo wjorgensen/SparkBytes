@@ -88,7 +88,7 @@ export default function Home() {
           )}
         </div>
       ) : (
-        <div>
+        <div className={styles.container}>
           <h1>Spark! Bytes</h1>
           <p>Find free food on BU campus</p>
           <button 
@@ -97,8 +97,10 @@ export default function Home() {
           >
             <Image
               src="/google-logo.png"
+              alt="Google logo"
               width={18}
               height={18}
+              style={{ marginRight: '8px' }}
             />
             Sign in with Google
           </button>
