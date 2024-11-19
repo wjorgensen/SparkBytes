@@ -4,12 +4,11 @@ import { auth } from "@/lib/firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { rtdb } from "@/lib/firebase";
 import { ref, set, get, child } from "firebase/database";
-import { useRouter } from "next/router"; // Import useRouter for navigation
+import Image from 'next/image';
 
 export default function Home() {
   const [signedIn, setSignedIn] = useState(false);
   const [events, setEvents] = useState(null);
-  const router = useRouter(); // Initialize useRouter
 
   // Sign in with Google
   const signInWithGoogle = async () => {
@@ -17,7 +16,6 @@ export default function Home() {
     try {
       await signInWithPopup(auth, provider);
       setSignedIn(true);
-      router.push("/home"); // Redirect to the home page
     } catch (error) {
       // TODO: Add error handling
       console.error("Error signing in with Google:", error);
@@ -98,7 +96,9 @@ export default function Home() {
             className={styles.googleButton}
           >
             <Image
-              src="/public/google-logo.png"
+              src="/google-logo.png"
+              width={18}
+              height={18}
             />
             Sign in with Google
           </button>
