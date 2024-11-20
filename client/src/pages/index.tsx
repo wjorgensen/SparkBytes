@@ -84,8 +84,8 @@ export default function Home() {
         </div>
       ) : (
         <div className={styles.container}>
-          <h1>Spark! Bytes</h1>
-          <p>Find free food on BU campus</p>
+          <h1 className={styles.loginHeader}>Spark! Bytes</h1>
+          <p className={styles.loginText}>Find free food on BU campus</p>
           <div className={styles.buttonContainer}>
             <button onClick={signInWithGoogle} className={styles.signInButton}>
               Sign in with Google

@@ -1,7 +1,19 @@
 
 .container {
-  padding: 20px;
+  padding: 90px 0;
   font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: rgb(189,167,149);
+}
+
+.loginHeader {   /*header on the login page*/
+  display: flex;
+  justify-content: center;
+}
+
+.loginText {  /*text underneath header on login page*/
+  display: flex;
+  justify-content: center;
 }
 
 .navbar {
