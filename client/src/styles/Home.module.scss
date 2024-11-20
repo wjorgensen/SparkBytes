@@ -3,7 +3,7 @@
   min-height: 100vh;
   font-family: Arial, sans-serif;
   text-align: center;
-  background-color: rgb(189,167,149);
+  background-color:rgb(188, 165, 141);
   margin: 0;
   padding: 0;
 }
@@ -12,7 +12,7 @@
   min-height: 100vh;
   font-family: Arial, sans-serif;
   text-align: center;
-  background-color: rgb(189,167,149);
+  background-color: rgb(188, 165, 141);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -33,6 +33,12 @@
   justify-content: center;
   margin-top: 20px;
   margin-bottom: 0;
+}
+
+.logoContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .navbar {

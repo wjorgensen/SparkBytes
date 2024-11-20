@@ -92,6 +92,14 @@ export default function Home() {
               Sign in with Google
             </button>
           </div>
+          <div className={styles.logoContainer}>
+            <Image
+              src="/logo.png" // The path to your logo in the public folder
+              alt="Spark Bytes Logo"
+              width={400} // Adjust the width
+              height={400} // Adjust the height
+              />
+            </div>
         </div>
       )}
     </>
