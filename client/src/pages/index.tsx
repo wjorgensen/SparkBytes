@@ -1,4 +1,5 @@
 import styles from "@/styles/Home.module.scss";
+import Image from 'next/image';
 import { useState } from "react";
 import { auth } from "@/lib/firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
