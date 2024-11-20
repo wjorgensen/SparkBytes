@@ -84,7 +84,7 @@ export default function Home() {
           )}
         </div>
       ) : (
-        <div className={styles.container}>
+        <div className={styles.loginContainer}>
           <h1 className={styles.loginHeader}>Spark! Bytes</h1>
           <p className={styles.loginText}>Find free food on BU campus</p>
           <div className={styles.buttonContainer}>
