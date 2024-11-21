@@ -53,17 +53,14 @@ const Events: NextPage = () => {
             ...childSnapshot.val()
           });
         });
-        // Sort events by date
         eventsData.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
         setEvents(eventsData);
       } else {
-        // If no events exist, set events to empty array
         setEvents([]);
         console.log('No events found in database');
       }
     } catch (error) {
       console.error('Error fetching events:', error);
-      // Set events to empty array on error
       setEvents([]);
       alert('Error loading events. Please try again.');
     } finally {
@@ -93,7 +90,6 @@ const Events: NextPage = () => {
         createdAt: new Date().toISOString()
       });
 
-      // Reset form
       setFormData({
         location: '',
         food: '',
@@ -101,7 +97,7 @@ const Events: NextPage = () => {
         extraInfo: ''
       });
       setShowForm(false);
-      fetchEvents(); // Refresh the events list
+      fetchEvents(); 
       alert('Event created successfully!');
     } catch (error) {
       console.error('Error creating event:', error);

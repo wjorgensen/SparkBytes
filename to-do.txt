@@ -1,0 +1,6 @@
+- Add admin login
+- add event specific pages
+- add profile page
+- add editing and deleting of your own events
+- add uid and creator fields to database
+- add filtering to events page
