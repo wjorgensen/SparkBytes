@@ -134,65 +134,76 @@ const Events: NextPage = () => {
         </button>
 
         {showForm && (
-          <form className={styles.eventForm} onSubmit={handleSubmit}>
-            <div className={styles.formGroup}>
-              <label htmlFor="location">Location:</label>
-              <input
-                type="text"
-                id="location"
-                name="location"
-                value={formData.location}
-                onChange={handleInputChange}
-                required
-                disabled={isSubmitting}
-              />
-            </div>
+          <div className={styles.modalOverlay}>
+            <div className={styles.eventForm}>
+              <button 
+                className={styles.closeButton}
+                onClick={() => setShowForm(false)}
+                type="button"
+              >
+                ×
+              </button>
+              <form onSubmit={handleSubmit}>
+                <div className={styles.formGroup}>
+                  <label htmlFor="location">Location:</label>
+                  <input
+                    type="text"
+                    id="location"
+                    name="location"
+                    value={formData.location}
+                    onChange={handleInputChange}
+                    required
+                    disabled={isSubmitting}
+                  />
+                </div>
 
-            <div className={styles.formGroup}>
-              <label htmlFor="food">Food:</label>
-              <input
-                type="text"
-                id="food"
-                name="food"
-                value={formData.food}
-                onChange={handleInputChange}
-                required
-                disabled={isSubmitting}
-              />
-            </div>
+                <div className={styles.formGroup}>
+                  <label htmlFor="food">Food:</label>
+                  <input
+                    type="text"
+                    id="food"
+                    name="food"
+                    value={formData.food}
+                    onChange={handleInputChange}
+                    required
+                    disabled={isSubmitting}
+                  />
+                </div>
 
-            <div className={styles.formGroup}>
-              <label htmlFor="date">Date:</label>
-              <input
-                type="datetime-local"
-                id="date"
-                name="date"
-                value={formData.date}
-                onChange={handleInputChange}
-                required
-                disabled={isSubmitting}
-              />
-            </div>
+                <div className={styles.formGroup}>
+                  <label htmlFor="date">Date:</label>
+                  <input
+                    type="datetime-local"
+                    id="date"
+                    name="date"
+                    value={formData.date}
+                    onChange={handleInputChange}
+                    required
+                    disabled={isSubmitting}
+                  />
+                </div>
 
-            <div className={styles.formGroup}>
-              <label htmlFor="extraInfo">Additional Information:</label>
-              <textarea
-                id="extraInfo"
-                name="extraInfo"
-                value={formData.extraInfo}
-                onChange={handleInputChange}
-                disabled={isSubmitting}
-              />
-            </div>
+                <div className={styles.formGroup}>
+                  <label htmlFor="extraInfo">Additional Information:</label>
+                  <textarea
+                    id="extraInfo"
+                    name="extraInfo"
+                    value={formData.extraInfo}
+                    onChange={handleInputChange}
+                    disabled={isSubmitting}
+                  />
+                </div>
 
-            <button 
-              type="submit" 
-              className={styles.submitButton}
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? 'Creating Event...' : 'Create Event'}
-            </button>
-          </form>
+                <button 
+                  type="submit" 
+                  className={styles.submitButton}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Creating Event...' : 'Create Event'}
+                </button>
+              </form>
+            </div>
+          </div>
         )}
 
         <div className={styles.eventsContainer}>
