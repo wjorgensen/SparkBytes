@@ -109,7 +109,19 @@ const Home: NextPage = () => {
               height={400} // Adjust the height
               />
             </div>
+            <div className={styles.aboutSection}>
+            <h2>About Spark! Bytes</h2>
+            <p>
+              Spark! Bytes is a platform designed to help Boston University students find free food on campus.
+              Our goal is to reduce food waste while ensuring students have access to resources they need.
+              By connecting students with events offering free food, Spark! Bytes fosters a community of sharing
+              and sustainability. Sign in to explore available events and join us in making a difference!
+            </p>
+          </div>
         </div>
+        
+        
+      
       )}
     </>
   );
