@@ -2,7 +2,7 @@ import Link from "next/link";
 import styles from "@/styles/Home.module.scss";
 import { withAuth } from "@/utils/auth";
 import type { NextPage } from 'next';
-import Navbar from "./layout/navbar";
+import Navbar from "../layout/navbar";
 
 const Home: NextPage = () => {
   return (
@@ -16,4 +16,4 @@ const Home: NextPage = () => {
   );
 }
 
-export default withAuth(Home);
+export default withAuth(Home); 
