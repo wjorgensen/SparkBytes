@@ -1,28 +1,13 @@
 import Link from "next/link";
-import styles from "@/styles/Home.module.scss"; // Assuming you have a Home.module.scss file for styling
+import styles from "@/styles/Home.module.scss";
+import { withAuth } from "@/utils/auth";
+import type { NextPage } from 'next';
+import Navbar from "./layout/navbar";
 
-export default function Home() {
+const Home: NextPage = () => {
   return (
     <div className={styles.container}>
-      {/* Navigation Bar */}
-      <nav className={styles.navbar}>
-        <ul className={styles.navList}>
-          <li>
-            <Link href="/home">Home</Link>
-          </li>
-          <li>
-            <Link href="/events">Events</Link>
-          </li>
-          <li>
-            <Link href="/about">About</Link>
-          </li>
-          <li>
-            <Link href="/profile">Profile</Link>
-          </li>
-        </ul>
-      </nav>
-
-      {/* Main Content */}
+      <Navbar />
       <main className={styles.main}>
         <h1>Welcome to Spark! Bytes</h1>
         <p>Discover free food and events happening on the BU campus.</p>
@@ -30,3 +15,5 @@ export default function Home() {
     </div>
   );
 }
+
+export default withAuth(Home);

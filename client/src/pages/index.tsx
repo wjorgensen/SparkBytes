@@ -1,16 +1,25 @@
 import styles from "@/styles/Home.module.scss";
 import Image from 'next/image';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { auth } from "@/lib/firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { rtdb } from "@/lib/firebase";
 import { ref, set, get, child } from "firebase/database";
 import { useRouter } from "next/router";
+import { useAuth } from "@/utils/auth";
+import type { NextPage } from 'next';
 
-export default function Home() {
+const Home: NextPage = () => {
   const [signedIn, setSignedIn] = useState(false);
   const [events, setEvents] = useState(null);
   const router = useRouter();
+  const { user, loading } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      router.replace('/home');
+    }
+  }, [user, router]);
 
   // Sign in with Google
   const signInWithGoogle = async () => {
@@ -105,3 +114,5 @@ export default function Home() {
     </>
   );
 }
+
+export default Home;

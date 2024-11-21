@@ -1,33 +1,16 @@
-import Link from "next/link";
-import styles from "@/styles/Events.module.scss"; // Assuming you have an Events.module.scss file for styling
+import styles from "@/styles/Events.module.scss";
+import { withAuth } from "@/utils/auth";
+import type { NextPage } from 'next';
+import Navbar from "./layout/navbar";
 
-export default function Events() {
+const Events: NextPage = () => {
   return (
     <div className={styles.container}>
-      {/* Navigation Bar */}
-      <nav className={styles.navbar}>
-        <ul className={styles.navList}>
-          <li>
-            <Link href="/home">Home</Link>
-          </li>
-          <li>
-            <Link href="/events">Events</Link>
-          </li>
-          <li>
-            <Link href="/about">About</Link>
-          </li>
-          <li>
-            <Link href="/profile">Profile</Link>
-          </li>
-        </ul>
-      </nav>
-
-      {/* Main Content */}
+      <Navbar />
       <main className={styles.main}>
         <h1>Events Page</h1>
         <p>Explore all the free food events happening on campus.</p>
 
-        {/* Add Event Button */}
         <button className={styles.addButton} onClick={() => alert("Add Event clicked!")}>
           Add Event
         </button>
@@ -35,3 +18,5 @@ export default function Events() {
     </div>
   );
 }
+
+export default withAuth(Events);
