@@ -10,11 +10,20 @@
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: #c82333;
+    background-color:rgb(188, 165, 141);
   }
 
   &:focus {
     outline: none;
     box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.3);
   }
+}
+
+.container {
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color:rgb(188, 165, 141);
+  margin: 0;
+  padding: 0;
 }
