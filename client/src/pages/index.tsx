@@ -9,7 +9,6 @@ import type { NextPage } from 'next';
 
 const Home: NextPage = () => {
   const [signedIn, setSignedIn] = useState(false);
-  const [events, setEvents] = useState(null);
   const router = useRouter();
   const { user, loading } = useAuth();
 
