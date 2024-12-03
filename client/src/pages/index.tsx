@@ -1,11 +1,12 @@
 import styles from "@/styles/Home.module.scss";
 import Image from 'next/image';
 import { useState, useEffect } from "react";
-import { auth } from "@/lib/firebase";
+import { auth, rtdb } from "@/lib/firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useRouter } from "next/router";
 import { useAuth } from "@/utils/auth";
 import type { NextPage } from 'next';
+import { ref, get } from 'firebase/database';
 
 const Home: NextPage = () => {
   const [signedIn, setSignedIn] = useState(false);
@@ -13,18 +14,44 @@ const Home: NextPage = () => {
   const { user, loading } = useAuth();
 
   useEffect(() => {
-    if (user) {
-      router.replace('/home');
+    const checkUser = async () => {
+      if (user) {
+        // Check if user exists in rtdb
+        const userRef = ref(rtdb, `users/${user.uid}`);
+        try {
+          const snapshot = await get(userRef);
+          if (!snapshot.exists()) {
+            router.replace('/signup');
+          } else {
+            router.replace('/home');
+          }
+        } catch (error) {
+          console.error("Error checking user data:", error);
+        }
+      }
+    };
+
+    if (!loading) {
+      checkUser();
     }
-  }, [user, router]);
+  }, [user, loading, router]);
 
   // Sign in with Google
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
       setSignedIn(true);
-      router.push("/home"); // Redirect to the home page
+      
+      // Check if user exists in rtdb
+      const userRef = ref(rtdb, `users/${result.user.uid}`);
+      const snapshot = await get(userRef);
+      
+      if (!snapshot.exists()) {
+        router.push('/signup');
+      } else {
+        router.push('/home');
+      }
     } catch (error) {
       console.error("Error signing in with Google:", error);
     }

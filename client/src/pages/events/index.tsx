@@ -4,7 +4,7 @@ import type { NextPage } from 'next';
 import Navbar from "../layout/navbar";
 import { useState, useEffect } from 'react';
 import { rtdb } from "@/lib/firebase";
-import { ref, push, get, query, orderByChild } from "firebase/database";
+import { ref, push, get, query, orderByChild, set } from "firebase/database";
 import { useAuth } from "@/utils/auth";
 
 interface EventForm {
@@ -38,6 +38,7 @@ const Events: NextPage = () => {
     fetchEvents();
   }, []);
 
+  // Fetch events from Firebase Realtime Database
   const fetchEvents = async () => {
     setIsLoading(true);
     try {
@@ -83,11 +84,23 @@ const Events: NextPage = () => {
     try {
       const eventsRef = ref(rtdb, 'events');
       const newEventRef = push(eventsRef);
+      const eventId = newEventRef.key;
       
-      await push(eventsRef, {
+      // Create the event
+      await set(newEventRef, {
         ...formData,
         creator: user?.uid,
         createdAt: new Date().toISOString()
+      });
+
+      // Update user's events array
+      const userRef = ref(rtdb, `users/${user?.uid}`);
+      const userSnapshot = await get(userRef);
+      const userData = userSnapshot.val();
+      
+      await set(userRef, {
+        ...userData,
+        events: [...(userData.events || []), eventId]
       });
 
       setFormData({
