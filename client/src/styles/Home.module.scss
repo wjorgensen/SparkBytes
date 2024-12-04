@@ -132,3 +132,11 @@ transform: scale(0.98); /* Slightly shrink for a click effect */
   color: rgb(100, 90, 80); /* Softer paragraph text */
 }
 
+.mapContainer {
+  width: 80%;
+  margin: 20px auto;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
