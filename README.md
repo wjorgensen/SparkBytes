@@ -20,8 +20,10 @@ After cloning, change into the project's directory: ```cd Spark!Bytes```
 ### Open in an IDE
 Open the project folder in your preferred IDE or text editor for better navigation and development.
 
+
 ### Install Dependencies
 Navigate to the client directory:```cd client```
+Add a .env file with the given API key
 Install the required dependencies:```npm install```
 
 ### Run the Development Server
