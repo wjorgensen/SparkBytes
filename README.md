@@ -23,8 +23,8 @@ Open the project folder in your preferred IDE or text editor for better navigati
 
 ### Install Dependencies
 Navigate to the client directory:```cd client```
-Add a .env file with the given API key
-Install the required dependencies:```npm install```
+. Add a .env file with the given API key
+. Install the required dependencies:```npm install```
 
 ### Run the Development Server
 Start the development server by running: ```npm run dev```
