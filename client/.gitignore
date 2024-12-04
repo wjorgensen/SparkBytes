@@ -31,6 +31,8 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+GOOGLE_MAPS_API_KEY=<AIzaSyDMV7cmGYRtZtKaydbuWp1z5rTavwvnevs>
+
 
 # vercel
 .vercel
