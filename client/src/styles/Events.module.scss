@@ -77,20 +77,43 @@
   
   .eventForm {
     position: relative;
-    max-width: 500px;
+    max-width: 600px;
     width: 90%;
     margin: 2rem auto;
     padding: 2rem;
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   
-    input, textarea {
+    input, textarea, select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 0.95rem;
       background-color: white;
-      color: black;
-      &::placeholder {
-        color: #666;
+      color: #2d2d2d;
+      transition: border-color 0.2s, box-shadow 0.2s;
+  
+      &:focus {
+        outline: none;
+        border-color: #0070f3;
+        box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.1);
       }
+    }
+  
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      background-size: 1em;
+      padding-right: 2.5rem;
+    }
+  
+    label {
+      color: #2d2d2d;
+      font-weight: 500;
     }
   }
   
@@ -111,26 +134,40 @@
   }
   
   .formGroup {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
   
     label {
       display: block;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.8rem;
       font-weight: 500;
-      color: #000;
+      color: #2d2d2d;
+      font-size: 0.95rem;
     }
   
-    input, textarea {
+    input, textarea, select {
       width: 100%;
-      padding: 0.5rem;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 1rem;
+      padding: 0.75rem;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      background-color: white;
+      color: #2d2d2d;
+      transition: border-color 0.2s, box-shadow 0.2s;
+  
+      &:focus {
+        outline: none;
+        border-color: #0070f3;
+        box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.1);
+      }
     }
   
-    textarea {
-      min-height: 100px;
-      resize: vertical;
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      background-size: 1em;
+      padding-right: 2.5rem;
     }
   }
   
@@ -217,6 +254,55 @@
       background-color: #ccc;
       cursor: not-allowed;
       opacity: 0.7;
+    }
+  }
+  
+  .dietaryTags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.75rem 0;
+  }
+  
+  .dietaryTag {
+    background-color: #eef2ff;
+    color: #0070f3;
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+  
+  .checkboxGroup {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  
+    label {
+      display: flex;
+      align-items: center;
+      margin: 0;
+      padding: 0.5rem;
+      border-radius: 6px;
+      background-color: #f5f5f5;
+      transition: background-color 0.2s;
+  
+      &:hover {
+        background-color: #eef2ff;
+      }
+  
+      input[type="checkbox"] {
+        width: auto;
+        margin-right: 0.75rem;
+        cursor: pointer;
+        accent-color: #0070f3;
+  
+        &:disabled {
+          cursor: not-allowed;
+          opacity: 0.6;
+        }
+      }
     }
   }
   

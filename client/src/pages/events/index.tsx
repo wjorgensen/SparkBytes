@@ -12,6 +12,15 @@ interface EventForm {
   food: string;
   date: string;
   extraInfo: string;
+  campusSection: 'west' | 'central' | 'east';
+  dietary: {
+    none: boolean;
+    vegetarian: boolean;
+    vegan: boolean;
+    glutenFree: boolean;
+    dairyFree: boolean;
+    nutFree: boolean;
+  };
 }
 
 interface Event extends EventForm {
@@ -29,7 +38,16 @@ const Events: NextPage = () => {
     location: '',
     food: '',
     date: '',
-    extraInfo: ''
+    extraInfo: '',
+    campusSection: 'central',
+    dietary: {
+      none: false,
+      vegetarian: false,
+      vegan: false,
+      glutenFree: false,
+      dairyFree: false,
+      nutFree: false,
+    }
   });
   const { user } = useAuth();
 
@@ -48,12 +66,36 @@ const Events: NextPage = () => {
       
       if (snapshot.exists()) {
         const eventsData: Event[] = [];
+        const now = new Date();
+        
+        // Get user preferences
+        const userRef = ref(rtdb, `users/${user?.uid}`);
+        const userSnapshot = await get(userRef);
+        const userPreferences = userSnapshot.val()?.dietary || {};
+        const hasSpecialDiet = Object.entries(userPreferences)
+          .some(([key, value]) => key !== 'none' && value === true);
+        
         snapshot.forEach((childSnapshot) => {
-          eventsData.push({
-            id: childSnapshot.key as string,
-            ...childSnapshot.val()
-          });
+          const eventDate = new Date(childSnapshot.val().date);
+          const eventData = childSnapshot.val();
+          
+          // Only add future events that match dietary preferences
+          if (eventDate > now) {
+            const matchesDietary = hasSpecialDiet
+              ? Object.entries(userPreferences)
+                  .some(([pref, value]) => 
+                    value === true && eventData.dietary[pref] === true)
+              : true;
+            
+            if (matchesDietary) {
+              eventsData.push({
+                id: childSnapshot.key as string,
+                ...eventData
+              });
+            }
+          }
         });
+        
         eventsData.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
         setEvents(eventsData);
       } else {
@@ -69,7 +111,9 @@ const Events: NextPage = () => {
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -107,7 +151,16 @@ const Events: NextPage = () => {
         location: '',
         food: '',
         date: '',
-        extraInfo: ''
+        extraInfo: '',
+        campusSection: 'central',
+        dietary: {
+          none: false,
+          vegetarian: false,
+          vegan: false,
+          glutenFree: false,
+          dairyFree: false,
+          nutFree: false,
+        }
       });
       setShowForm(false);
       fetchEvents(); 
@@ -125,6 +178,31 @@ const Events: NextPage = () => {
       dateStyle: 'medium',
       timeStyle: 'short'
     });
+  };
+
+  const handleDietaryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = e.target;
+    const dietaryOption = name.split('.')[1];
+
+    setFormData(prev => ({
+      ...prev,
+      dietary: {
+        ...prev.dietary,
+        ...(dietaryOption === 'none'
+          ? {
+              none: checked,
+              vegetarian: false,
+              vegan: false,
+              glutenFree: false,
+              dairyFree: false,
+              nutFree: false,
+            }
+          : {
+              [dietaryOption]: checked,
+              none: false,
+            }),
+      },
+    }));
   };
 
   return (
@@ -167,6 +245,22 @@ const Events: NextPage = () => {
                 </div>
 
                 <div className={styles.formGroup}>
+                  <label htmlFor="campusSection">Campus Section:</label>
+                  <select
+                    id="campusSection"
+                    name="campusSection"
+                    value={formData.campusSection}
+                    onChange={handleInputChange}
+                    required
+                    disabled={isSubmitting}
+                  >
+                    <option value="west">West Campus</option>
+                    <option value="central">Central Campus</option>
+                    <option value="east">East Campus</option>
+                  </select>
+                </div>
+
+                <div className={styles.formGroup}>
                   <label htmlFor="food">Food:</label>
                   <input
                     type="text"
@@ -180,7 +274,7 @@ const Events: NextPage = () => {
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label htmlFor="date">Date:</label>
+                  <label htmlFor="date">Date and Time:</label>
                   <input
                     type="datetime-local"
                     id="date"
@@ -201,6 +295,36 @@ const Events: NextPage = () => {
                     onChange={handleInputChange}
                     disabled={isSubmitting}
                   />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Dietary Options:</label>
+                  <div className={styles.checkboxGroup}>
+                    <label>
+                      <input
+                        type="checkbox"
+                        name="dietary.none"
+                        checked={formData.dietary.none}
+                        onChange={handleDietaryChange}
+                        disabled={isSubmitting}
+                      />
+                      None
+                    </label>
+                    {Object.entries(formData.dietary)
+                      .filter(([key]) => key !== 'none')
+                      .map(([pref]) => (
+                        <label key={pref}>
+                          <input
+                            type="checkbox"
+                            name={`dietary.${pref}`}
+                            checked={formData.dietary[pref as keyof typeof formData.dietary]}
+                            onChange={handleDietaryChange}
+                            disabled={isSubmitting || formData.dietary.none}
+                          />
+                          {pref.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                        </label>
+                    ))}
+                  </div>
                 </div>
 
                 <button 
@@ -225,7 +349,17 @@ const Events: NextPage = () => {
                 <div key={event.id} className={styles.eventCard}>
                   <h3>{event.food}</h3>
                   <p><strong>Location:</strong> {event.location}</p>
+                  <p><strong>Campus Section:</strong> {event.campusSection.charAt(0).toUpperCase() + event.campusSection.slice(1)}</p>
                   <p><strong>Date:</strong> {formatDate(event.date)}</p>
+                  <div className={styles.dietaryTags}>
+                    {Object.entries(event.dietary)
+                      .filter(([key, value]) => key !== 'none' && value)
+                      .map(([pref]) => (
+                        <span key={pref} className={styles.dietaryTag}>
+                          {pref.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                        </span>
+                      ))}
+                  </div>
                   {event.extraInfo && (
                     <p><strong>Additional Info:</strong> {event.extraInfo}</p>
                   )}

@@ -41,6 +41,15 @@ const Home: NextPage = () => {
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
+      const email = result.user.email;
+      
+      // Check if email ends with bu.edu
+      if (!email?.endsWith('@bu.edu')) {
+        await auth.signOut(); // Sign out the user immediately
+        alert('Only Boston University email addresses (@bu.edu) are allowed to sign up.');
+        return; // Return early before any routing occurs
+      }
+      
       setSignedIn(true);
       
       // Check if user exists in rtdb
