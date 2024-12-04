@@ -49,6 +49,59 @@ const Events: NextPage = () => {
       nutFree: false,
     }
   });
+
+  const [filters, setFilters] = useState({
+    campusSection: '',
+    dietary: {
+      none: false,
+      vegetarian: false,
+      vegan: false,
+      glutenFree: false,
+      dairyFree: false,
+      nutFree: false,
+    },
+  });
+  
+  const handleFilterChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const target = e.target as HTMLInputElement | HTMLSelectElement;
+  
+    const { name, value } = target;
+  
+    if (target instanceof HTMLInputElement && target.type === 'checkbox') {
+      const { checked } = target;
+      if (name.startsWith('dietary.')) {
+        const dietaryOption = name.split('.')[1];
+        setFilters(prev => ({
+          ...prev,
+          dietary: {
+            ...prev.dietary,
+            [dietaryOption]: checked,
+          },
+        }));
+      }
+    } else {
+      setFilters(prev => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+  };
+  
+  
+  const filteredEvents = events.filter(event => {
+    const matchesCampus =
+      !filters.campusSection || event.campusSection === filters.campusSection;
+    const matchesDietary = Object.entries(filters.dietary)
+      .filter(([key, value]) => value)
+      .every(([key]) => event.dietary[key as keyof typeof event.dietary]); // Use type assertion
+    return matchesCampus && matchesDietary;
+  });
+  
+  
+
+
   const { user } = useAuth();
 
   // Fetch events when component mounts
@@ -338,6 +391,41 @@ const Events: NextPage = () => {
             </div>
           </div>
         )}
+        <div className={styles.filterContainer}>
+          <h3>Filter Events</h3>
+          <div className={styles.filterGroup}>
+            <label htmlFor="campusSectionFilter">Campus Section:</label>
+            <select
+              id="campusSectionFilter"
+              name="campusSection"
+              value={filters.campusSection}
+              onChange={handleFilterChange}
+            >
+              <option value="">All</option>
+              <option value="west">West Campus</option>
+              <option value="central">Central Campus</option>
+              <option value="east">East Campus</option>
+            </select>
+          </div>
+
+          <div className={styles.filterGroup}>
+            <label>Dietary Preferences:</label>
+            <div className={styles.checkboxGroup}>
+              {Object.entries(filters.dietary).map(([pref, value]) => (
+                <label key={pref}>
+                  <input
+                    type="checkbox"
+                    name={`dietary.${pref}`}
+                    checked={value}
+                    onChange={handleFilterChange}
+                  />
+                  {pref.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
+
 
         <div className={styles.eventsContainer}>
           <h2>Upcoming Events</h2>
@@ -345,7 +433,7 @@ const Events: NextPage = () => {
             <div className={styles.loading}>Loading events...</div>
           ) : events.length > 0 ? (
             <div className={styles.eventsList}>
-              {events.map((event) => (
+              {filteredEvents.map((event) => (
                 <div key={event.id} className={styles.eventCard}>
                   <h3>{event.food}</h3>
                   <p><strong>Location:</strong> {event.location}</p>
