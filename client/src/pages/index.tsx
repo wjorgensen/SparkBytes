@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { useAuth } from "@/utils/auth";
 import type { NextPage } from 'next';
 import { ref, get } from 'firebase/database';
+import { FirebaseError } from 'firebase/app';
 
 const Home: NextPage = () => {
   const [signedIn, setSignedIn] = useState(false);
@@ -47,7 +48,7 @@ const Home: NextPage = () => {
       if (!email?.endsWith('@bu.edu')) {
         await auth.signOut(); // Sign out the user immediately
         alert('Only Boston University email addresses (@bu.edu) are allowed to sign up.');
-        return; // Return early before any routing occurs
+        return;
       }
       
       setSignedIn(true);
@@ -62,7 +63,21 @@ const Home: NextPage = () => {
         router.push('/home');
       }
     } catch (error) {
-      console.error("Error signing in with Google:", error);
+      if (error instanceof FirebaseError) {
+        if (error.code === 'auth/popup-closed-by-user') {
+          alert('Sign-in was cancelled. Please try again.');
+        } else if (error.code === 'auth/popup-blocked') {
+          alert('Pop-up was blocked by your browser. Please enable pop-ups for this site and try again.');
+        } else if (error.code === 'auth/cancelled-popup-request') {
+          alert('Please wait for the sign-in window to open before trying again.');
+        } else {
+          console.error("Error signing in with Google:", error);
+          alert('An error occurred during sign in. Please try again.');
+        }
+      } else {
+        console.error("Unknown error during sign in:", error);
+        alert('An unexpected error occurred. Please try again.');
+      }
     }
   };
 

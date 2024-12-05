@@ -258,6 +258,30 @@ const Events: NextPage = () => {
     }));
   };
 
+  const [showDietaryDropdown, setShowDietaryDropdown] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showDietaryDropdown && 
+          !(event.target as Element).closest('.dietaryDropdown')) {
+        setShowDietaryDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showDietaryDropdown]);
+
+  const handleDietaryOptionClick = (option: string) => {
+    setFilters(prev => ({
+      ...prev,
+      dietary: {
+        ...prev.dietary,
+        [option]: !prev.dietary[option as keyof typeof prev.dietary]
+      }
+    }));
+  };
+
   return (
     <div className={styles.container}>
       <Navbar />
@@ -391,38 +415,72 @@ const Events: NextPage = () => {
             </div>
           </div>
         )}
-        <div className={styles.filterContainer}>
-          <h3>Filter Events</h3>
-          <div className={styles.filterGroup}>
-            <label htmlFor="campusSectionFilter">Campus Section:</label>
-            <select
-              id="campusSectionFilter"
-              name="campusSection"
-              value={filters.campusSection}
-              onChange={handleFilterChange}
-            >
-              <option value="">All</option>
-              <option value="west">West Campus</option>
-              <option value="central">Central Campus</option>
-              <option value="east">East Campus</option>
-            </select>
+        <div className={styles.filterSection}>
+          <div className={styles.filterHeader}>
+            <h2>Filter Events</h2>
           </div>
-
-          <div className={styles.filterGroup}>
-            <label>Dietary Preferences:</label>
-            <div className={styles.checkboxGroup}>
-              {Object.entries(filters.dietary).map(([pref, value]) => (
-                <label key={pref}>
-                  <input
-                    type="checkbox"
-                    name={`dietary.${pref}`}
-                    checked={value}
-                    onChange={handleFilterChange}
-                  />
-                  {pref.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
-                </label>
-              ))}
+          <div className={styles.filterControls}>
+            <div className={styles.filterSelect}>
+              <select
+                id="campusSectionFilter"
+                name="campusSection"
+                value={filters.campusSection}
+                onChange={handleFilterChange}
+              >
+                <option value="">All Campuses</option>
+                <option value="west">West Campus</option>
+                <option value="central">Central Campus</option>
+                <option value="east">East Campus</option>
+              </select>
             </div>
+
+            <div className={`${styles.filterSelect} dietaryDropdown`}>
+              <button 
+                type="button"
+                className={styles.dropdownButton}
+                onClick={() => setShowDietaryDropdown(!showDietaryDropdown)}
+              >
+                Dietary Preferences
+              </button>
+              {showDietaryDropdown && (
+                <div className={styles.dropdownContent}>
+                  {Object.entries(filters.dietary)
+                    .filter(([key]) => key !== 'none')
+                    .map(([pref, value]) => (
+                      <button
+                        key={pref}
+                        className={styles.optionButton}
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevent dropdown from closing
+                          handleDietaryOptionClick(pref);
+                        }}
+                      >
+                        <span>{pref.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</span>
+                        {value && <span className={styles.checkmark}>✓</span>}
+                      </button>
+                    ))}
+                </div>
+              )}
+            </div>
+
+            {(filters.campusSection || Object.values(filters.dietary).some(v => v)) && (
+              <button 
+                onClick={() => setFilters({
+                  campusSection: '',
+                  dietary: {
+                    none: false,
+                    vegetarian: false,
+                    vegan: false,
+                    glutenFree: false,
+                    dairyFree: false,
+                    nutFree: false,
+                  },
+                })}
+                className={styles.resetButton}
+              >
+                Reset Filters
+              </button>
+            )}
           </div>
         </div>
 
