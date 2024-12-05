@@ -110,28 +110,6 @@ background-color: #2a65d0; /* Even darker on click */
 transform: scale(0.98); /* Slightly shrink for a click effect */
 }
 
-.aboutSection {
-  margin-top: 40px; /* Adds space between the login and about sections */
-  padding: 20px;
-  background-color:rgb(188, 165, 141);
-  border-radius: 8px; /* Rounded corners for a modern look */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  text-align: center; /* Center-align text */
-  font-family: Arial, sans-serif;
-}
-
-.aboutSection h2 {
-  font-size: 1.8rem;
-  margin-bottom: 15px;
-  color: rgb(85, 74, 64); /* Soft brown text color */
-}
-
-.aboutSection p {
-  font-size: 1.1rem;
-  line-height: 1.6; /* Improves readability */
-  color: rgb(100, 90, 80); /* Softer paragraph text */
-}
-
 .mapContainer {
   width: 80%;
   margin: 20px auto;
