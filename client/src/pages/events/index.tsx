@@ -95,7 +95,7 @@ const Events: NextPage = () => {
       !filters.campusSection || event.campusSection === filters.campusSection;
     const matchesDietary = Object.entries(filters.dietary)
       .filter(([key, value]) => value)
-      .every(([key]) => event.dietary[key as keyof typeof event.dietary]); // Use type assertion
+      .every(([key]) => event.dietary[key as keyof typeof event.dietary]); 
     return matchesCampus && matchesDietary;
   });
   
@@ -104,12 +104,10 @@ const Events: NextPage = () => {
 
   const { user } = useAuth();
 
-  // Fetch events when component mounts
   useEffect(() => {
     fetchEvents();
   }, []);
 
-  // Fetch events from Firebase Realtime Database
   const fetchEvents = async () => {
     setIsLoading(true);
     try {
@@ -132,7 +130,6 @@ const Events: NextPage = () => {
           const eventDate = new Date(childSnapshot.val().date);
           const eventData = childSnapshot.val();
           
-          // Only add future events that match dietary preferences
           if (eventDate > now) {
             const matchesDietary = hasSpecialDiet
               ? Object.entries(userPreferences)
@@ -182,15 +179,13 @@ const Events: NextPage = () => {
       const eventsRef = ref(rtdb, 'events');
       const newEventRef = push(eventsRef);
       const eventId = newEventRef.key;
-      
-      // Create the event
+
       await set(newEventRef, {
         ...formData,
         creator: user?.uid,
         createdAt: new Date().toISOString()
       });
 
-      // Update user's events array
       const userRef = ref(rtdb, `users/${user?.uid}`);
       const userSnapshot = await get(userRef);
       const userData = userSnapshot.val();
@@ -451,7 +446,7 @@ const Events: NextPage = () => {
                         key={pref}
                         className={styles.optionButton}
                         onClick={(e) => {
-                          e.stopPropagation(); // Prevent dropdown from closing
+                          e.stopPropagation(); 
                           handleDietaryOptionClick(pref);
                         }}
                       >

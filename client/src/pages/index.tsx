@@ -17,7 +17,6 @@ const Home: NextPage = () => {
   useEffect(() => {
     const checkUser = async () => {
       if (user) {
-        // Check if user exists in rtdb
         const userRef = ref(rtdb, `users/${user.uid}`);
         try {
           const snapshot = await get(userRef);
@@ -37,23 +36,20 @@ const Home: NextPage = () => {
     }
   }, [user, loading, router]);
 
-  // Sign in with Google
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
       const email = result.user.email;
       
-      // Check if email ends with bu.edu
       if (!email?.endsWith('@bu.edu')) {
-        await auth.signOut(); // Sign out the user immediately
+        await auth.signOut(); 
         alert('Only Boston University email addresses (@bu.edu) are allowed to sign up.');
         return;
       }
       
       setSignedIn(true);
       
-      // Check if user exists in rtdb
       const userRef = ref(rtdb, `users/${result.user.uid}`);
       const snapshot = await get(userRef);
       
@@ -93,10 +89,10 @@ const Home: NextPage = () => {
           </div>
           <div className={styles.logoContainer}>
             <Image
-              src="/spark.png" // The path to your logo in the public folder
+              src="/spark.png" 
               alt="Spark Bytes Logo"
-              width={400} // Adjust the width
-              height={400} // Adjust the height
+              width={400} 
+              height={400} 
               />
             </div>
             <div className={styles.aboutSection}>

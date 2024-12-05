@@ -18,7 +18,7 @@ const Home: NextPage = () => {
         <div className={styles.mapContainer}>
           <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
             <Map
-              defaultCenter={{ lat: 42.3505, lng: -71.1054 }} // BU's coordinates
+              defaultCenter={{ lat: 42.3505, lng: -71.1054 }} 
               defaultZoom={15}
               style={{ width: '100%', height: '400px' }}
             />

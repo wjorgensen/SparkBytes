@@ -107,13 +107,11 @@ const Profile: NextPage = () => {
       if (!user) return;
       
       try {
-        // Get user data to get event IDs
         const userRef = ref(rtdb, `users/${user.uid}`);
         const userSnapshot = await get(userRef);
         const userData = userSnapshot.val();
         
         if (userData?.events) {
-          // Fetch each event
           const eventPromises = userData.events.map(async (eventId: string) => {
             const eventRef = ref(rtdb, `events/${eventId}`);
             const eventSnapshot = await get(eventRef);
@@ -136,7 +134,7 @@ const Profile: NextPage = () => {
   const handleSignOut = async () => {
     try {
       await signOut(auth);
-      router.push('/'); // Redirect to landing page after sign out
+      router.push('/'); 
     } catch (error) {
       console.error("Error signing out:", error);
     }
@@ -185,7 +183,6 @@ const Profile: NextPage = () => {
         createdAt: editingEvent.createdAt || new Date().toISOString()
       });
 
-      // Update the events list
       setUserEvents(prevEvents =>
         prevEvents.map(event =>
           event.id === editingEvent.id
@@ -231,9 +228,7 @@ const Profile: NextPage = () => {
         dietary: {
           ...prev.dietary,
           [dietaryKey]: checked,
-          // If any other option is checked, uncheck 'none'
           ...(dietaryKey !== 'none' && checked ? { none: false } : {}),
-          // If 'none' is checked, uncheck all others
           ...(dietaryKey === 'none' && checked ? {
             vegetarian: false,
             vegan: false,
@@ -264,7 +259,6 @@ const Profile: NextPage = () => {
         dietary: profileForm.dietary
       });
 
-      // Update local state
       setUserData(prev => prev ? ({
         ...prev,
         name: profileForm.name,
