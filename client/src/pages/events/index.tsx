@@ -29,11 +29,21 @@ interface Event extends EventForm {
   createdAt: string;
 }
 
+/**
+ * Events Component
+ * 
+ * This component displays a list of events, allows users to filter events based on dietary preferences
+ * and campus sections, and provides a form to create new events.
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered Events component.
+ */
 const Events: NextPage = () => {
-  const [showForm, setShowForm] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [events, setEvents] = useState<Event[]>([]);
+  // State variables
+  const [showForm, setShowForm] = useState(false); // Controls visibility of the event creation form
+  const [isLoading, setIsLoading] = useState(false); // Indicates loading state for fetching events
+  const [isSubmitting, setIsSubmitting] = useState(false); // Indicates submitting state for creating events
+  const [events, setEvents] = useState<Event[]>([]); // Stores the list of events
   const [formData, setFormData] = useState<EventForm>({
     location: '',
     food: '',
@@ -48,8 +58,7 @@ const Events: NextPage = () => {
       dairyFree: false,
       nutFree: false,
     }
-  });
-
+  }); // Stores form data for new events
   const [filters, setFilters] = useState({
     campusSection: '',
     dietary: {
@@ -60,8 +69,13 @@ const Events: NextPage = () => {
       dairyFree: false,
       nutFree: false,
     },
-  });
+  }); // Stores current filter settings
   
+  /**
+   * Handles changes in filter inputs.
+   * 
+   * @param {React.ChangeEvent<HTMLInputElement | HTMLSelectElement>} e - The change event from the input.
+   */
   const handleFilterChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -90,6 +104,11 @@ const Events: NextPage = () => {
   };
   
   
+  /**
+   * Filters events based on selected filters.
+   * 
+   * @returns {Event[]} - The filtered list of events.
+   */
   const filteredEvents = events.filter(event => {
     const matchesCampus =
       !filters.campusSection || event.campusSection === filters.campusSection;
@@ -102,12 +121,19 @@ const Events: NextPage = () => {
   
 
 
+  // Fetch user data from authentication context
   const { user } = useAuth();
 
   useEffect(() => {
-    fetchEvents();
+    fetchEvents(); // Fetch events when the component mounts
   }, []);
 
+  /**
+   * Fetches events from the database.
+   * 
+   * @async
+   * @returns {Promise<void>}
+   */
   const fetchEvents = async () => {
     setIsLoading(true);
     try {
@@ -161,6 +187,11 @@ const Events: NextPage = () => {
     }
   };
 
+  /**
+   * Handles changes in input fields of the event form.
+   * 
+   * @param {React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>} e - The change event from the input.
+   */
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -171,6 +202,13 @@ const Events: NextPage = () => {
     }));
   };
 
+  /**
+   * Handles the submission of the event creation form.
+   * 
+   * @param {React.FormEvent} e - The form submission event.
+   * @async
+   * @returns {Promise<void>}
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -221,6 +259,12 @@ const Events: NextPage = () => {
     }
   };
 
+  /**
+   * Formats a date string into a more readable format.
+   * 
+   * @param {string} dateString - The date string to format.
+   * @returns {string} - The formatted date string.
+   */
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleString('en-US', {
       dateStyle: 'medium',
@@ -228,6 +272,11 @@ const Events: NextPage = () => {
     });
   };
 
+  /**
+   * Handles changes in dietary options.
+   * 
+   * @param {React.ChangeEvent<HTMLInputElement>} e - The change event from the checkbox input.
+   */
   const handleDietaryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
     const dietaryOption = name.split('.')[1];
@@ -253,6 +302,7 @@ const Events: NextPage = () => {
     }));
   };
 
+  // State for controlling dietary dropdown visibility
   const [showDietaryDropdown, setShowDietaryDropdown] = useState(false);
 
   useEffect(() => {
@@ -267,6 +317,11 @@ const Events: NextPage = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showDietaryDropdown]);
 
+  /**
+   * Toggles the selection of a dietary option.
+   * 
+   * @param {string} option - The dietary option to toggle.
+   */
   const handleDietaryOptionClick = (option: string) => {
     setFilters(prev => ({
       ...prev,
