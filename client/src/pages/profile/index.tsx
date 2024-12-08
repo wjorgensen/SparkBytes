@@ -52,6 +52,15 @@ interface ProfileFormData {
   };
 }
 
+/**
+ * Profile Component
+ * 
+ * This component displays the user's profile information, allows editing of user details,
+ * and manages the user's events (creation, editing, and deletion).
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered Profile component.
+ */
 const Profile: NextPage = () => {
   const router = useRouter();
   const { user } = useAuth();
