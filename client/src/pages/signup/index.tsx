@@ -18,6 +18,16 @@ interface UserPreferences {
   events: string[];
 }
 
+/**
+ * Signup Component
+ * 
+ * This component allows users to complete their profile by providing their name
+ * and dietary preferences. It handles form submission and validation, and saves
+ * the data to the Firebase real-time database.
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered Signup component.
+ */
 export default function Signup() {
   const router = useRouter();
   const { user } = useAuth();
@@ -36,6 +46,11 @@ export default function Signup() {
     events: []
   });
 
+  /**
+   * Handles changes in input fields.
+   * 
+   * @param {React.ChangeEvent<HTMLInputElement>} e - The change event from the input.
+   */
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     
@@ -72,6 +87,11 @@ export default function Signup() {
     }
   };
 
+  /**
+   * Validates the form data before submission.
+   * 
+   * @returns {boolean} - Returns true if the form is valid, otherwise false.
+   */
   const validateForm = () => {
     if (!formData.name.trim()) {
       setError('Please enter your name');
@@ -88,6 +108,11 @@ export default function Signup() {
     return true;
   };
 
+  /**
+   * Handles form submission.
+   * 
+   * @param {React.FormEvent} e - The form submission event.
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
