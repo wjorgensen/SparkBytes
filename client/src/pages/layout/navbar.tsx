@@ -1,6 +1,15 @@
 import Link from "next/link";
 import styles from "@/styles/Home.module.scss";
 
+/**
+ * Navbar Component
+ * 
+ * This component renders the navigation bar for the application.
+ * It includes links to the home, events, and profile pages.
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered Navbar component.
+ */
 const Navbar = () => {
   return (
     <nav className={styles.navbar}>
